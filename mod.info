@@ -3,4 +3,3 @@ poster=unpack.png
 description=This mod allows you to empty out bags quickly by rightclicking them, by RoboMat.
 URL=http://theindiestone.com/forums/index.php/topic/1047-
 id=RMUnpackBags
-require=RMUtility

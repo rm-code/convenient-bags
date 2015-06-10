@@ -9,15 +9,58 @@ require'Mods/UnpackBags/TimedActions/TAUnpackBag';
 require'TimedActions/ISTimedActionQueue';
 
 -- ------------------------------------------------
--- Local Variables
--- ------------------------------------------------
-
-local zomboid = zomboid;
-local table = table;
-
--- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
+
+---
+-- Shows a modal window that informs the player about something and only has
+-- an okay button to be closed.
+--
+-- @param _text - The text to display on the modal
+-- @param _centered - If set to true the modal will be centered (optional)
+-- @param _width - The width of the window (optional)
+-- @param _height - The height of the window (optional)
+--
+-- @author RoboMat (updated by rmcode)
+--
+local function showOkModal(_text, _centered, _width, _height, _posX, _posY)
+	local posX = _posX or 0;
+	local posY = _posY or 0;
+	local width = _width or 230;
+	local height = _height or 120;
+	local centered = _centered;
+	local txt = _text;
+	local core = getCore();
+
+	-- center the modal if necessary
+	if centered then
+		posX = core:getScreenWidth() * 0.5 - width * 0.5;
+		posY = core:getScreenHeight() * 0.5 - height * 0.5;
+	end
+
+	local modal = ISModalDialog:new(posX, posY, width, height, txt, false, nil, nil);
+	modal:initialise();
+	modal:addToUIManager();
+end
+
+
+---
+-- Converts a java arrayList to a lua table. Remember
+-- that lua tables start at index 1. Thanks to lemmy101.
+--
+-- @param _arrayList - The arrayList to convert
+--
+-- @author RoboMat (updated by rmcode)
+--
+local function convertArrayList(arrayList)
+	local itemTable = {};
+
+	for i = 0, arrayList:size() - 1 do
+		itemTable[i] = arrayList:get(i);
+	end
+
+	return itemTable;
+end
 
 ---
 -- Creates the timed action which empties the bag.
@@ -34,7 +77,7 @@ local function onUnpackBag(_items, _player, _itemsInContainer, _bag)
 
 	-- We check if the target bag has enough free capacity to hold the items.
 	if container:getCapacity() < (bagWeight + conWeight) then
-		zomboid.okModal("There is not enough space to unpack the bag here.", true);
+		showOkModal("There is not enough space to unpack the bag here.", true);
 		return;
 	end
 
@@ -61,7 +104,7 @@ local function createMenu(_player, _context, _items)
 		local item = itemTable[i1];
 		if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
 			local bag = item; -- Store the clicked bag.
-			local itemsInContainer = table.convertArrayList(bag:getInventory():getItems()); -- Get its contents.
+			local itemsInContainer = convertArrayList(bag:getInventory():getItems()); -- Get its contents.
 
 			-- Only create a menu entry if the bag contains an item.
 			if #itemsInContainer > 0 then
@@ -76,7 +119,7 @@ local function createMenu(_player, _context, _items)
 				local item = itemTable[i1].items[i2];
 				if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
 					local bag = item;
-					local itemsInContainer = table.convertArrayList(bag:getInventory():getItems());
+					local itemsInContainer = convertArrayList(bag:getInventory():getItems());
 					if #itemsInContainer > 0 then
 						context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
 					end

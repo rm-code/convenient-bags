@@ -11,7 +11,6 @@ local MOD_VERSION = "1.0.4";
 local MOD_AUTHOR = "RoboMat";
 local MOD_DESCRIPTION = "Allows the player to unpack a bag in his inventory.";
 local MOD_URL = "http://theindiestone.com/forums/index.php/topic/1047-";
-local REQUIRED_UTIL_VERSION = "2.0.0";
 
 local isDebug = false;
 
@@ -35,19 +34,8 @@ local function debug(player)
 	end
 end
 
----
--- Make sure the user has installed the correct version of the modding utilites.´
---
-local function checkUtility()
-	if RMUtility.getVersion() ~= REQUIRED_UTIL_VERSION then
-		print("ERROR: This mod requires version " .. REQUIRED_UTIL_VERSION .. " of the Modding Utilities.");
-		print("ERROR: Please check " .. MOD_URL .. " for more information.\n");
-	end
-end
-
 -- ------------------------------------------------
 -- Game hooks
 -- ------------------------------------------------
 Events.OnGameBoot.Add(info);
-Events.OnGameBoot.Add(checkUtility);
 Events.OnNewGame.Add(debug);
