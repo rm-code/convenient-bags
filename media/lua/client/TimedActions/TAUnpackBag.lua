@@ -1,17 +1,10 @@
--- =============================================================================
--- Unpack Bags
--- by RoboMat
---
--- Created: 23.08.13 - 10:39
--- =============================================================================
-
-require'TimedActions/ISBaseTimedAction';
+require('TimedActions/ISBaseTimedAction');
 
 -- ------------------------------------------------
 -- Global Variables
 -- ------------------------------------------------
 
-TAUnpackBag = ISBaseTimedAction:derive("TAUnpackBag");
+TAUnpackBag = ISBaseTimedAction:derive('TAUnpackBag');
 
 -- ------------------------------------------------
 -- Functions
@@ -77,20 +70,20 @@ end
 
 ---
 -- Constructor
--- @param _character - The character who performs the action.
--- @param _table - The table containing all items in the bag.
--- @param _bag - The container / bag itself.
--- @param _time - The time to complete the action.
+-- @param character - The character who performs the action.
+-- @param iTable - The table containing all items in the bag.
+-- @param bag - The container / bag itself.
+-- @param time - The time to complete the action.
 --
-function TAUnpackBag:new(_character, _table, _bag, _time)
+function TAUnpackBag:new(character, iTable, bag, time)
     local o = {};
     setmetatable(o, self);
     self.__index = self;
-    o.character = _character;
-    o.bag = _bag;
-    o.itemsInBag = _table;
+    o.character = character;
+    o.bag = bag;
+    o.itemsInBag = iTable;
     o.stopOnWalk = false;
     o.stopOnRun = false;
-    o.maxTime = _time;
+    o.maxTime = time;
     return o;
 end
