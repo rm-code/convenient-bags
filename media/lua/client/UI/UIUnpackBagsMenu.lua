@@ -9,6 +9,12 @@ require'Mods/UnpackBags/TimedActions/TAUnpackBag';
 require'TimedActions/ISTimedActionQueue';
 
 -- ------------------------------------------------
+-- Local variables
+-- ------------------------------------------------
+
+local menuEntry = getText("UI_menu_entry");
+
+-- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
 
@@ -108,7 +114,7 @@ local function createMenu(_player, _context, _items)
 
             -- Only create a menu entry if the bag contains an item.
             if #itemsInContainer > 0 then
-                context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
+                context:addOption(string.format(menuEntry, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, bag);
             end
 
         elseif type(itemTable[i1]) == "table" then
@@ -121,7 +127,7 @@ local function createMenu(_player, _context, _items)
                     local bag = item;
                     local itemsInContainer = convertArrayList(bag:getInventory():getItems());
                     if #itemsInContainer > 0 then
-                        context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
+                        context:addOption(string.format(menuEntry, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, bag);
                     end
                 end
             end
