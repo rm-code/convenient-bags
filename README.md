@@ -14,7 +14,9 @@ Version 1.1.0
 - [Fix #1](https://github.com/rm-code/unpack-bags/issues/1): Items are no longer deleted
 - Updated folder structure to make the mod work with the latest version of PZ
 - Remove utility dependencies (no extra files are needed to run the mod)
+
 Version 1.0.4
+
 - Updated to work with the latest modding utils
 
 Version 1.0.3
