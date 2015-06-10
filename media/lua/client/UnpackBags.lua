@@ -21,17 +21,17 @@ local isDebug = false;
 -- Prints out the mod info on startup.
 --
 local function info()
-	print("Mod Loaded: " .. MOD_NAME .. " by " .. MOD_AUTHOR .. " (v" .. MOD_VERSION .. ")");
+    print("Mod Loaded: " .. MOD_NAME .. " by " .. MOD_AUTHOR .. " (v" .. MOD_VERSION .. ")");
 end
 
 ---
 -- Give player some containers for testing purposes.
 --
 local function debug(player)
-	if isDebug then
-		player:getInventory():AddItem("Base.Schoolbag");
-		player:getInventory():AddItem("Base.Plasticbag");
-	end
+    if isDebug then
+        player:getInventory():AddItem("Base.Schoolbag");
+        player:getInventory():AddItem("Base.Plasticbag");
+    end
 end
 
 -- ------------------------------------------------

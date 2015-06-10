@@ -24,23 +24,23 @@ require'TimedActions/ISTimedActionQueue';
 -- @author RoboMat (updated by rmcode)
 --
 local function showOkModal(_text, _centered, _width, _height, _posX, _posY)
-	local posX = _posX or 0;
-	local posY = _posY or 0;
-	local width = _width or 230;
-	local height = _height or 120;
-	local centered = _centered;
-	local txt = _text;
-	local core = getCore();
+    local posX = _posX or 0;
+    local posY = _posY or 0;
+    local width = _width or 230;
+    local height = _height or 120;
+    local centered = _centered;
+    local txt = _text;
+    local core = getCore();
 
-	-- center the modal if necessary
-	if centered then
-		posX = core:getScreenWidth() * 0.5 - width * 0.5;
-		posY = core:getScreenHeight() * 0.5 - height * 0.5;
-	end
+    -- center the modal if necessary
+    if centered then
+        posX = core:getScreenWidth() * 0.5 - width * 0.5;
+        posY = core:getScreenHeight() * 0.5 - height * 0.5;
+    end
 
-	local modal = ISModalDialog:new(posX, posY, width, height, txt, false, nil, nil);
-	modal:initialise();
-	modal:addToUIManager();
+    local modal = ISModalDialog:new(posX, posY, width, height, txt, false, nil, nil);
+    modal:initialise();
+    modal:addToUIManager();
 end
 
 
@@ -53,13 +53,13 @@ end
 -- @author RoboMat (updated by rmcode)
 --
 local function convertArrayList(arrayList)
-	local itemTable = {};
+    local itemTable = {};
 
-	for i = 0, arrayList:size() - 1 do
-		itemTable[i] = arrayList:get(i);
-	end
+    for i = 0, arrayList:size() - 1 do
+        itemTable[i] = arrayList:get(i);
+    end
 
-	return itemTable;
+    return itemTable;
 end
 
 ---
@@ -70,18 +70,18 @@ end
 -- @param _bag - The bag to unpack.
 --
 local function onUnpackBag(_items, _player, _itemsInContainer, _bag)
-	local bag = _bag;
-	local bagWeight = bag:getInventory():getCapacityWeight();
-	local container = bag:getContainer();
-	local conWeight = bag:getContainer():getCapacityWeight();
+    local bag = _bag;
+    local bagWeight = bag:getInventory():getCapacityWeight();
+    local container = bag:getContainer();
+    local conWeight = bag:getContainer():getCapacityWeight();
 
-	-- We check if the target bag has enough free capacity to hold the items.
-	if container:getCapacity() < (bagWeight + conWeight) then
-		showOkModal("There is not enough space to unpack the bag here.", true);
-		return;
-	end
+    -- We check if the target bag has enough free capacity to hold the items.
+    if container:getCapacity() < (bagWeight + conWeight) then
+        showOkModal("There is not enough space to unpack the bag here.", true);
+        return;
+    end
 
-	ISTimedActionQueue.add(TAUnpackBag:new(_player, _itemsInContainer, bag, 50));
+    ISTimedActionQueue.add(TAUnpackBag:new(_player, _itemsInContainer, bag, 50));
 end
 
 ---
@@ -92,41 +92,41 @@ end
 -- @param _items - A table containing the clicked items / stack.
 --
 local function createMenu(_player, _context, _items)
-	local itemTable = _items; -- The table containing the clicked items.
-	local context = _context;
-	local player = getSpecificPlayer(_player);
+    local itemTable = _items; -- The table containing the clicked items.
+    local context = _context;
+    local player = getSpecificPlayer(_player);
 
-	-- We iterate through the table of clicked items. We have
-	-- to seperate between single items, stacks and expanded
-	-- stacks.
-	for i1 = 1, #itemTable do
+    -- We iterate through the table of clicked items. We have
+    -- to seperate between single items, stacks and expanded
+    -- stacks.
+    for i1 = 1, #itemTable do
 
-		local item = itemTable[i1];
-		if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
-			local bag = item; -- Store the clicked bag.
-			local itemsInContainer = convertArrayList(bag:getInventory():getItems()); -- Get its contents.
+        local item = itemTable[i1];
+        if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
+            local bag = item; -- Store the clicked bag.
+            local itemsInContainer = convertArrayList(bag:getInventory():getItems()); -- Get its contents.
 
-			-- Only create a menu entry if the bag contains an item.
-			if #itemsInContainer > 0 then
-				context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
-			end
+            -- Only create a menu entry if the bag contains an item.
+            if #itemsInContainer > 0 then
+                context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
+            end
 
-		elseif type(itemTable[i1]) == "table" then
-			-- We start to iterate at the second index to jump over the dummy
-			-- item that is contained in the item-table.
-			for i2 = 2, #itemTable[i1].items do
+        elseif type(itemTable[i1]) == "table" then
+            -- We start to iterate at the second index to jump over the dummy
+            -- item that is contained in the item-table.
+            for i2 = 2, #itemTable[i1].items do
 
-				local item = itemTable[i1].items[i2];
-				if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
-					local bag = item;
-					local itemsInContainer = convertArrayList(bag:getInventory():getItems());
-					if #itemsInContainer > 0 then
-						context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
-					end
-				end
-			end
-		end
-	end
+                local item = itemTable[i1].items[i2];
+                if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
+                    local bag = item;
+                    local itemsInContainer = convertArrayList(bag:getInventory():getItems());
+                    if #itemsInContainer > 0 then
+                        context:addOption("Unpack (" .. #itemsInContainer .. " Items)", itemTable, onUnpackBag, player, itemsInContainer, bag);
+                    end
+                end
+            end
+        end
+    end
 end
 
 -- ------------------------------------------------
