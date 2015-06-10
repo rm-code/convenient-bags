@@ -75,6 +75,23 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
 end
 
 ---
+-- Creates the actual menu entry
+-- @param item - The bag item.
+-- @param itemsInContainer - A table containing all items in the bag.
+-- @param itemTable - A table containing the clicked items / stack.
+-- @param player - The player who clicked the menu.
+-- @param context - The context menu to add a new option to.
+--
+local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
+    if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
+        local itemsInContainer = convertArrayList(item:getInventory():getItems());
+        if #itemsInContainer > 0 then
+            context:addOption(string.format(menuEntryText, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
+        end
+    end
+end
+
+---
 -- Creates a context menu entry when the player selects
 -- an inventory container (e.g. hiking bag).
 -- @param player - The player who clicked the menu.
@@ -88,29 +105,17 @@ local function createMenu(player, context, itemTable)
     -- to seperate between single items, stacks and expanded
     -- stacks.
     for i1 = 1, #itemTable do
-
-        local item = itemTable[i1];
-        if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
-
-            local itemsInContainer = convertArrayList(item:getInventory():getItems());
-            if #itemsInContainer > 0 then
-                context:addOption(string.format(menuEntryText, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
-            end
-
-        elseif type(itemTable[i1]) == "table" then
+        if type(itemTable[i1]) == "table" then
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #itemTable[i1].items do
 
                 local item = itemTable[i1].items[i2];
-                if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
-
-                    local itemsInContainer = convertArrayList(item:getInventory():getItems());
-                    if #itemsInContainer > 0 then
-                        context:addOption(string.format(menuEntryText, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
-                    end
-                end
+                createMenuEntry(item, itemsInContainer, itemTable, player, context);
             end
+        else
+            local item = itemTable[i1];
+            createMenuEntry(item, itemsInContainer, itemTable, player, context);
         end
     end
 end
