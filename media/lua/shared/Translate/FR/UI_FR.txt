@@ -1,0 +1,4 @@
+UI_FR = {
+    UI_menu_entry_one = "Prendre un objet",
+    UI_menu_entry_multi = "Prendre %d objets",
+};

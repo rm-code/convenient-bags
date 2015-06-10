@@ -1,0 +1,4 @@
+UI_EN = {
+    UI_menu_entry_one = "Unpack one item",
+    UI_menu_entry_multi = "Unpack %d items",
+};

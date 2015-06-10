@@ -1,0 +1,4 @@
+UI_FI = {
+    UI_menu_entry_one = "Pura yksi tavara",
+    UI_menu_entry_multi = "Pura %d tavaraa",
+};
