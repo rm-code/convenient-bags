@@ -55,8 +55,8 @@ end
 local function convertArrayList(arrayList)
     local itemTable = {};
 
-    for i = 0, arrayList:size() - 1 do
-        itemTable[i] = arrayList:get(i);
+    for i = 1, arrayList:size() do
+        itemTable[i] = arrayList:get(i - 1);
     end
 
     return itemTable;
