@@ -2,6 +2,7 @@
 
 ### Version 1.1.0
 
+- Added special menu entries for one and multiple objects
 - Added possiblity for translations
 	- Added german translation
 	- Added finnish translation
