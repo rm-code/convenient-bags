@@ -1,3 +1,4 @@
 UI_DE = {
-    UI_menu_entry = "Entpacke %d Gegenstände",
+    UI_menu_entry_one = "Entpacke einen Gegenstand",
+    UI_menu_entry_multi = "Entpacke %d Gegenstände",
 };

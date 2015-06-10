@@ -5,7 +5,8 @@ require('TimedActions/ISTimedActionQueue');
 -- Local variables
 -- ------------------------------------------------
 
-local menuEntryText = getText('UI_menu_entry');
+local menuEntryTextOne = getText('UI_menu_entry_one');
+local menuEntryTextMulti = getText('UI_menu_entry_multi');
 
 -- ------------------------------------------------
 -- Local Functions
@@ -85,8 +86,10 @@ end
 local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
     if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
-        if #itemsInContainer > 0 then
-            context:addOption(string.format(menuEntryText, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
+        if #itemsInContainer == 1 then
+            context:addOption(menuEntryTextOne, itemTable, onUnpackBag, player, itemsInContainer, item);
+        elseif #itemsInContainer > 1 then
+            context:addOption(string.format(menuEntryTextMulti, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
         end
     end
 end
