@@ -108,16 +108,14 @@ local function createMenu(player, context, itemTable)
     -- to seperate between single items, stacks and expanded
     -- stacks.
     for i1 = 1, #itemTable do
-        if type(itemTable[i1]) == "table" then
+        local item = itemTable[i1];
+        if type(item) == "table" then
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
-            for i2 = 2, #itemTable[i1].items do
-
-                local item = itemTable[i1].items[i2];
-                createMenuEntry(item, itemsInContainer, itemTable, player, context);
+            for i2 = 2, #item.items do
+                createMenuEntry(item.items[i2], itemsInContainer, itemTable, player, context);
             end
         else
-            local item = itemTable[i1];
             createMenuEntry(item, itemsInContainer, itemTable, player, context);
         end
     end
