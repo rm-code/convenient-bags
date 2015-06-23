@@ -68,7 +68,7 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
 
     -- We check if the target container has enough free capacity to hold the items.
     if container:getCapacity() < (bagWeight + conWeight) then
-        showOkModal("There is not enough space to unpack the bag here.", true);
+        showOkModal('There is not enough space to unpack the bag here.', true);
         return;
     end
 
@@ -84,7 +84,7 @@ end
 -- @param context - The context menu to add a new option to.
 --
 local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
-    if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
+    if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
             context:addOption(menuEntryTextOne, itemTable, onUnpackBag, player, itemsInContainer, item);
@@ -109,7 +109,7 @@ local function createMenu(player, context, itemTable)
     -- stacks.
     for i1 = 1, #itemTable do
         local item = itemTable[i1];
-        if type(item) == "table" then
+        if type(item) == 'table' then
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
