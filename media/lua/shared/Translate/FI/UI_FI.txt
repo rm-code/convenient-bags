@@ -1,4 +1,5 @@
 UI_FI = {
     UI_menu_entry_one = "Pura yksi tavara",
     UI_menu_entry_multi = "Pura %d tavaraa",
+    UI_warning_modal = "Tilaa on liian vähän repun purkamiseen",
 };

@@ -7,6 +7,7 @@ require('TimedActions/ISTimedActionQueue');
 
 local menuEntryTextOne = getText('UI_menu_entry_one');
 local menuEntryTextMulti = getText('UI_menu_entry_multi');
+local modalWarningText = getText('UI_warning_modal');
 
 -- ------------------------------------------------
 -- Local Functions
@@ -69,7 +70,7 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
 
     -- We check if the target container has enough free capacity to hold the items.
     if container:getCapacity() < (bagWeight + conWeight) then
-        showOkModal('There is not enough space to unpack the bag here.', true);
+        showOkModal(modalWarningText, true);
         return;
     end
 
