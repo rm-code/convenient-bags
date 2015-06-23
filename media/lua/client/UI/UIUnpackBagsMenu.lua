@@ -35,6 +35,7 @@ local function showOkModal(txt, centered, w, h, x, y)
     end
 
     local modal = ISModalDialog:new(x, y, w, h, txt);
+    modal.backgroundColor = { r = 1.0, g = 0.0, b = 0.0, a = 0.5 };
     modal:initialise();
     modal:addToUIManager();
 end
