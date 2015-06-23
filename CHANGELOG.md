@@ -1,5 +1,12 @@
 # Changelog
 
+### Version 1.2.0
+
+- Added translations for the warning modal
+- Added russian translations
+- Changed the background color of the warning modal
+- Update the preview image
+
 ### Version 1.1.0
 
 - Added special menu entries for one and multiple objects
