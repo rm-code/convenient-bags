@@ -49,7 +49,7 @@ function TAUnpackBag:perform()
     for _, item in ipairs(self.itemsInBag) do
         if item then
             -- If the floor is selected add the items to the ground.
-            if container:getType() == "floor" then
+            if container:getType() == 'floor' then
                 player:getCurrentSquare():AddWorldInventoryItem(item, 0.0, 0.0, 0.0);
             else
                 container:AddItem(item);

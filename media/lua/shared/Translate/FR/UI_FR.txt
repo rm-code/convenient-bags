@@ -1,4 +1,5 @@
 UI_FR = {
     UI_menu_entry_one = "Prendre un objet",
     UI_menu_entry_multi = "Prendre %d objets",
+    UI_warning_modal = "Il n'y a pas assez d'espace pour déballer le sac ici!",
 };

@@ -7,6 +7,7 @@ require('TimedActions/ISTimedActionQueue');
 
 local menuEntryTextOne = getText('UI_menu_entry_one');
 local menuEntryTextMulti = getText('UI_menu_entry_multi');
+local modalWarningText = getText('UI_warning_modal');
 
 -- ------------------------------------------------
 -- Local Functions
@@ -35,6 +36,7 @@ local function showOkModal(txt, centered, w, h, x, y)
     end
 
     local modal = ISModalDialog:new(x, y, w, h, txt);
+    modal.backgroundColor = { r = 1.0, g = 0.0, b = 0.0, a = 0.5 };
     modal:initialise();
     modal:addToUIManager();
 end
@@ -68,7 +70,7 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
 
     -- We check if the target container has enough free capacity to hold the items.
     if container:getCapacity() < (bagWeight + conWeight) then
-        showOkModal("There is not enough space to unpack the bag here.", true);
+        showOkModal(modalWarningText, true);
         return;
     end
 
@@ -84,7 +86,7 @@ end
 -- @param context - The context menu to add a new option to.
 --
 local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
-    if instanceof(item, "InventoryItem") and instanceof(item, "InventoryContainer") then
+    if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
             context:addOption(menuEntryTextOne, itemTable, onUnpackBag, player, itemsInContainer, item);
@@ -108,16 +110,14 @@ local function createMenu(player, context, itemTable)
     -- to seperate between single items, stacks and expanded
     -- stacks.
     for i1 = 1, #itemTable do
-        if type(itemTable[i1]) == "table" then
+        local item = itemTable[i1];
+        if type(item) == 'table' then
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
-            for i2 = 2, #itemTable[i1].items do
-
-                local item = itemTable[i1].items[i2];
-                createMenuEntry(item, itemsInContainer, itemTable, player, context);
+            for i2 = 2, #item.items do
+                createMenuEntry(item.items[i2], itemsInContainer, itemTable, player, context);
             end
         else
-            local item = itemTable[i1];
             createMenuEntry(item, itemsInContainer, itemTable, player, context);
         end
     end
