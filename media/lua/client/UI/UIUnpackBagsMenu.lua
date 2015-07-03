@@ -80,12 +80,11 @@ end
 ---
 -- Creates the actual menu entry
 -- @param item - The bag item.
--- @param itemsInContainer - A table containing all items in the bag.
 -- @param itemTable - A table containing the clicked items / stack.
 -- @param player - The player who clicked the menu.
 -- @param context - The context menu to add a new option to.
 --
-local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
+local function createMenuEntry(item, itemTable, player, context)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
@@ -115,10 +114,10 @@ local function createMenu(player, context, itemTable)
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
-                createMenuEntry(item.items[i2], itemsInContainer, itemTable, player, context);
+                createMenuEntry(item.items[i2], itemTable, player, context);
             end
         else
-            createMenuEntry(item, itemsInContainer, itemTable, player, context);
+            createMenuEntry(item, itemTable, player, context);
         end
     end
 end
