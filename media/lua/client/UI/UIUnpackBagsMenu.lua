@@ -134,8 +134,25 @@ local function createInventoryMenu(player, context, itemTable)
     end
 end
 
+---
+-- Creates a world context menu when the player selects and item on the floor.
+-- @param player - The player who opened the menu.
+-- @param context - The menu to add a new option to.
+-- @param worldobjects - A table containing the world objects on the tile.
+--
+local function createWorldContextMenu(player, context, worldobjects)
+    local player = getSpecificPlayer(player);
+
+    for _, object in ipairs(worldobjects) do
+        if instanceof(object, 'IsoWorldInventoryObject') then
+            createMenuEntry(object:getItem(), worldobjects, player, context, onUnpackBag);
+        end
+    end
+end
+
 -- ------------------------------------------------
 -- Game Hooks
 -- ------------------------------------------------
 
 Events.OnPreFillInventoryObjectContextMenu.Add(createInventoryMenu);
+Events.OnFillWorldObjectContextMenu.Add(createWorldContextMenu);
