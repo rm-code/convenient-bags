@@ -10,6 +10,7 @@ local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
 local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
 local UNPACKING_DURATION = 50;
+local UNPACKING_DURATION_PARTIAL = 100;
 
 -- ------------------------------------------------
 -- Local Functions
@@ -66,17 +67,21 @@ end
 -- @param bag - The bag to unpack.
 --
 local function onUnpackBag(items, player, itemsInContainer, bag)
-    local bagWeight = bag:getInventory():getCapacityWeight();
     local container = bag:getContainer();
-    local conWeight = bag:getContainer():getCapacityWeight();
 
-    -- We check if the target container has enough free capacity to hold the items.
-    if container:getCapacity() < (bagWeight + conWeight) then
+    -- Display a warning and abort the unpacking if the next item in the bag doesn't fit into the container.
+    if container:getMaxWeight() < itemsInContainer[1]:getActualWeight() + container:getCapacityWeight() then
         showOkModal(MODAL_WARNING_TEXT, true);
         return;
     end
 
-    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION));
+    -- Partially unpacking a bag will have a longer timed action to represent how the player
+    -- is emptying the bag more carefully.
+    if container:getMaxWeight() < (bag:getInventory():getCapacityWeight() + container:getCapacityWeight()) then
+        ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION_PARTIAL));
+    else
+        ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION));
+    end
 end
 
 ---

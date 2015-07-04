@@ -15,7 +15,7 @@ TAUnpackBag = ISBaseTimedAction:derive('TAUnpackBag');
 -- is still valid.
 --
 function TAUnpackBag:isValid()
-    return true;
+    return not self.full;
 end
 
 ---
@@ -37,23 +37,26 @@ end
 function TAUnpackBag:perform()
     local player = self.character;
     local bag = self.bag;
-    local inventory = bag:getInventory(); -- Get the bag's inventory.
-    local container = bag:getContainer(); -- Get the container in which the bag itself is contained.
-
-    -- Remove all items from the baggage container.
-    inventory:removeAllItems();
+    local inventory = bag:getInventory(); -- Get the bag's inventory (ItemContainer).
+    local container = bag:getContainer(); -- Get the container in which the bag itself is contained (ItemContainer).
 
     -- Now we move all the items from the bag to the container.
     container:setDrawDirty(true);
 
     for _, item in ipairs(self.itemsInBag) do
-        if item then
+        -- Check if we have enough space in the container to place the items.
+        if container:getCapacityWeight() + item:getActualWeight() <= container:getMaxWeight() then
             -- If the floor is selected add the items to the ground.
             if container:getType() == 'floor' then
+                inventory:Remove(item);
                 bag:getWorldItem():getSquare():AddWorldInventoryItem(item, 0.0, 0.0, 0.0);
             else
+                inventory:Remove(item);
                 container:AddItem(item);
             end
+        else
+            self.full = true;
+            break;
         end
     end
 
@@ -85,5 +88,6 @@ function TAUnpackBag:new(character, iTable, bag, time)
     o.stopOnWalk = false;
     o.stopOnRun = false;
     o.maxTime = time;
+    o.full = false;
     return o;
 end
