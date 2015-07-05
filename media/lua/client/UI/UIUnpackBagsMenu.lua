@@ -9,8 +9,10 @@ local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
 local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
 local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
-local UNPACKING_DURATION = 50;
-local UNPACKING_DURATION_PARTIAL = 100;
+-- The factors for calculating the timed action durations for both
+-- the normal and the partial unpacking.
+local DURATION_DEFAULT_FACTOR = 2.5;
+local DURATION_PARTIAL_FACTOR = 3.5;
 
 -- ------------------------------------------------
 -- Local Functions
@@ -75,13 +77,15 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
         return;
     end
 
-    -- Partially unpacking a bag will have a longer timed action to represent how the player
-    -- is emptying the bag more carefully.
+    -- Partially unpacking a bag will have a longer timed action to represent how the player is emptying the bag
+    -- more carefully. The duration of the TimedAction also depends on the amount of items in the bag.
+    local duration;
     if container:getMaxWeight() < (bag:getInventory():getCapacityWeight() + container:getCapacityWeight()) then
-        ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION_PARTIAL));
+        duration = #itemsInContainer * DURATION_PARTIAL_FACTOR;
     else
-        ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION));
+        duration = #itemsInContainer * DURATION_DEFAULT_FACTOR;
     end
+    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, duration));
 end
 
 ---
