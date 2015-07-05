@@ -9,6 +9,8 @@ local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
 local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
 local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
+local UNPACKING_DURATION = 50;
+
 -- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
@@ -74,7 +76,7 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
         return;
     end
 
-    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, 50));
+    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, UNPACKING_DURATION));
 end
 
 ---
