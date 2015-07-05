@@ -2,12 +2,17 @@ require('Mods/UnpackBags/TimedActions/TAUnpackBag');
 require('TimedActions/ISTimedActionQueue');
 
 -- ------------------------------------------------
--- Local variables
+-- Constants
 -- ------------------------------------------------
 
-local menuEntryTextOne = getText('UI_menu_entry_one');
-local menuEntryTextMulti = getText('UI_menu_entry_multi');
-local modalWarningText = getText('UI_warning_modal');
+local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
+local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
+local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
+
+-- The factors for calculating the timed action durations for both
+-- the normal and the partial unpacking.
+local DURATION_DEFAULT_FACTOR = 2.5;
+local DURATION_PARTIAL_FACTOR = 3.5;
 
 -- ------------------------------------------------
 -- Local Functions
@@ -64,34 +69,39 @@ end
 -- @param bag - The bag to unpack.
 --
 local function onUnpackBag(items, player, itemsInContainer, bag)
-    local bagWeight = bag:getInventory():getCapacityWeight();
     local container = bag:getContainer();
-    local conWeight = bag:getContainer():getCapacityWeight();
 
-    -- We check if the target container has enough free capacity to hold the items.
-    if container:getCapacity() < (bagWeight + conWeight) then
-        showOkModal(modalWarningText, true);
+    -- Display a warning and abort the unpacking if the next item in the bag doesn't fit into the container.
+    if container:getMaxWeight() < itemsInContainer[1]:getActualWeight() + container:getCapacityWeight() then
+        showOkModal(MODAL_WARNING_TEXT, true);
         return;
     end
 
-    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, 50));
+    -- Partially unpacking a bag will have a longer timed action to represent how the player is emptying the bag
+    -- more carefully. The duration of the TimedAction also depends on the amount of items in the bag.
+    local duration;
+    if container:getMaxWeight() < (bag:getInventory():getCapacityWeight() + container:getCapacityWeight()) then
+        duration = #itemsInContainer * DURATION_PARTIAL_FACTOR;
+    else
+        duration = #itemsInContainer * DURATION_DEFAULT_FACTOR;
+    end
+    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, duration));
 end
 
 ---
 -- Creates the actual menu entry
 -- @param item - The bag item.
--- @param itemsInContainer - A table containing all items in the bag.
 -- @param itemTable - A table containing the clicked items / stack.
 -- @param player - The player who clicked the menu.
 -- @param context - The context menu to add a new option to.
 --
-local function createMenuEntry(item, itemsInContainer, itemTable, player, context)
+local function createMenuEntry(item, itemTable, player, context)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
-            context:addOption(menuEntryTextOne, itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, onUnpackBag, player, itemsInContainer, item);
         elseif #itemsInContainer > 1 then
-            context:addOption(string.format(menuEntryTextMulti, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
         end
     end
 end
@@ -115,10 +125,10 @@ local function createMenu(player, context, itemTable)
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
-                createMenuEntry(item.items[i2], itemsInContainer, itemTable, player, context);
+                createMenuEntry(item.items[i2], itemTable, player, context);
             end
         else
-            createMenuEntry(item, itemsInContainer, itemTable, player, context);
+            createMenuEntry(item, itemTable, player, context);
         end
     end
 end
