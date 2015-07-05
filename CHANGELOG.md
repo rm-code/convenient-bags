@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 1.3.0
+
+- Duration of the TimeAction is now dependent on the amount of items in the bag
+- Bags can now be partially emptied if the target container is too small to hold all the items ([Closes #4](https://github.com/rm-code/unpack-bags/issues/4))
+- [Fixed #2](https://github.com/rm-code/unpack-bags/issues/2): Items are now placed on the bag's IsoSquare
+
 ### Version 1.2.0
 
 - Added translations for the warning modal
@@ -14,7 +20,7 @@
 	- Added german translation
 	- Added finnish translation
 	- Added french translation
-- [Fix #1](https://github.com/rm-code/unpack-bags/issues/1): Items are no longer deleted
+- [Fixed #1](https://github.com/rm-code/unpack-bags/issues/1): Items are no longer deleted
 - Updated folder structure to make the mod work with the latest version of PZ
 - Remove utility dependencies (no extra files are needed to run the mod)
 
