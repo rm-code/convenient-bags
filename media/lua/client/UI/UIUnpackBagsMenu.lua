@@ -2,12 +2,12 @@ require('Mods/UnpackBags/TimedActions/TAUnpackBag');
 require('TimedActions/ISTimedActionQueue');
 
 -- ------------------------------------------------
--- Local variables
+-- Constants
 -- ------------------------------------------------
 
-local menuEntryTextOne = getText('UI_menu_entry_one');
-local menuEntryTextMulti = getText('UI_menu_entry_multi');
-local modalWarningText = getText('UI_warning_modal');
+local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
+local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
+local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
 -- ------------------------------------------------
 -- Local Functions
@@ -70,7 +70,7 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
 
     -- We check if the target container has enough free capacity to hold the items.
     if container:getCapacity() < (bagWeight + conWeight) then
-        showOkModal(modalWarningText, true);
+        showOkModal(MODAL_WARNING_TEXT, true);
         return;
     end
 
@@ -88,9 +88,9 @@ local function createMenuEntry(item, itemTable, player, context)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
-            context:addOption(menuEntryTextOne, itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, onUnpackBag, player, itemsInContainer, item);
         elseif #itemsInContainer > 1 then
-            context:addOption(string.format(menuEntryTextMulti, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
         end
     end
 end
