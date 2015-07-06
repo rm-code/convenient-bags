@@ -113,7 +113,7 @@ end
 -- @param context - The context menu to add a new option to.
 -- @param itemTable - A table containing the clicked items / stack.
 --
-local function createMenu(player, context, itemTable)
+local function createInventoryMenu(player, context, itemTable)
     local player = getSpecificPlayer(player);
 
     -- We iterate through the table of clicked items. We have
@@ -137,4 +137,4 @@ end
 -- Game Hooks
 -- ------------------------------------------------
 
-Events.OnPreFillInventoryObjectContextMenu.Add(createMenu);
+Events.OnPreFillInventoryObjectContextMenu.Add(createInventoryMenu);
