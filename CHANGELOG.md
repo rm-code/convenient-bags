@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.4.0
+
+- Added a world context menu for unpacking items on the floor ([Closes #3](https://github.com/rm-code/unpack-bags/issues/3))
+
 ### Version 1.3.0
 
 - Duration of the TimeAction is now dependent on the amount of items in the bag
