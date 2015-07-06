@@ -94,14 +94,15 @@ end
 -- @param itemTable - A table containing the clicked items / stack.
 -- @param player - The player who clicked the menu.
 -- @param context - The context menu to add a new option to.
+-- @paran func - The function to execute when the menu is clicked.
 --
-local function createMenuEntry(item, itemTable, player, context)
+local function createMenuEntry(item, itemTable, player, context, func)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInContainer = convertArrayList(item:getInventory():getItems());
         if #itemsInContainer == 1 then
-            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, func, player, itemsInContainer, item);
         elseif #itemsInContainer > 1 then
-            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInContainer), itemTable, onUnpackBag, player, itemsInContainer, item);
+            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInContainer), itemTable, func, player, itemsInContainer, item);
         end
     end
 end
@@ -113,7 +114,7 @@ end
 -- @param context - The context menu to add a new option to.
 -- @param itemTable - A table containing the clicked items / stack.
 --
-local function createMenu(player, context, itemTable)
+local function createInventoryMenu(player, context, itemTable)
     local player = getSpecificPlayer(player);
 
     -- We iterate through the table of clicked items. We have
@@ -125,10 +126,26 @@ local function createMenu(player, context, itemTable)
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
-                createMenuEntry(item.items[i2], itemTable, player, context);
+                createMenuEntry(item.items[i2], itemTable, player, context, onUnpackBag);
             end
         else
-            createMenuEntry(item, itemTable, player, context);
+            createMenuEntry(item, itemTable, player, context, onUnpackBag);
+        end
+    end
+end
+
+---
+-- Creates a world context menu when the player selects and item on the floor.
+-- @param player - The player who opened the menu.
+-- @param context - The menu to add a new option to.
+-- @param worldobjects - A table containing the world objects on the tile.
+--
+local function createWorldContextMenu(player, context, worldobjects)
+    local player = getSpecificPlayer(player);
+
+    for _, object in ipairs(worldobjects) do
+        if instanceof(object, 'IsoWorldInventoryObject') then
+            createMenuEntry(object:getItem(), worldobjects, player, context, onUnpackBag);
         end
     end
 end
@@ -137,4 +154,5 @@ end
 -- Game Hooks
 -- ------------------------------------------------
 
-Events.OnPreFillInventoryObjectContextMenu.Add(createMenu);
+Events.OnPreFillInventoryObjectContextMenu.Add(createInventoryMenu);
+Events.OnFillWorldObjectContextMenu.Add(createWorldContextMenu);
