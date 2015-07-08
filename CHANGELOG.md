@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.5.0
+
+- Added support for Tiny AVC (see https://github.com/blind-coder/pz-tiny_avc/releases/)
+
 ### Version 1.4.0
 
 - Added a world context menu for unpacking items on the floor ([Closes #3](https://github.com/rm-code/unpack-bags/issues/3))
