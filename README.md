@@ -4,7 +4,7 @@ Unpack Bags is a mod for [Project Zomboid](http://projectzomboid.com/) which all
 
 Bags can be unpacked everywhere. They will dump their contents into the container in which they currently are located. This can be the player's inventory, a cupboard, or even the floor.
 
-![preview](https://raw.githubusercontent.com/rm-code/unpack-bags/develop/unpack.png)
+![preview](https://raw.githubusercontent.com/rm-code/unpack-bags/master/RMUnpackBags/unpack.png)
 
 ## Overview
 
