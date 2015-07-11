@@ -1,5 +1,7 @@
 require('Mods/UnpackBags/TimedActions/TAUnpackBag');
 require('TimedActions/ISTimedActionQueue');
+require('TimedActions/ISInventoryTransferAction');
+require('luautils');
 
 -- ------------------------------------------------
 -- Constants
@@ -7,6 +9,7 @@ require('TimedActions/ISTimedActionQueue');
 
 local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
 local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
+local MENU_ENTRY_PACKING  = getText('UI_menu_entry_packing');
 local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
 -- The factors for calculating the timed action durations for both
@@ -17,34 +20,6 @@ local DURATION_PARTIAL_FACTOR = 3.5;
 -- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
-
----
--- Shows a modal window that informs the player about something and only has
--- an okay button to be closed.
---
--- @param txt - The text to display on the modal.
--- @param centered - If set to true the modal will be centered (optional).
--- @param w - The width of the window (optional).
--- @param h - The height of the window (optional).
--- @param x - The x position of the modal (optional).
--- @param y - The y position of the modal (optional).
---
-local function showOkModal(txt, centered, w, h, x, y)
-    local x, y = x or 0, y or 0;
-    local w, h = w or 230, h or 120;
-    local core = getCore();
-
-    -- center the modal if necessary
-    if centered then
-        x = core:getScreenWidth() * 0.5 - w * 0.5;
-        y = core:getScreenHeight() * 0.5 - h * 0.5;
-    end
-
-    local modal = ISModalDialog:new(x, y, w, h, txt);
-    modal.backgroundColor = { r = 1.0, g = 0.0, b = 0.0, a = 0.5 };
-    modal:initialise();
-    modal:addToUIManager();
-end
 
 ---
 -- Converts a java arrayList to a lua table.
@@ -65,15 +40,15 @@ end
 -- Creates the timed action which empties the bag.
 -- @param items - A table containing the clicked items / stack.
 -- @param player - The player who clicked the menu.
--- @param itemsInContainer - The items contained in the bag.
+-- @param itemsInBag - The items contained in the bag.
 -- @param bag - The bag to unpack.
 --
-local function onUnpackBag(items, player, itemsInContainer, bag)
+local function onUnpackBag(items, player, itemsInBag, bag)
     local container = bag:getContainer();
 
     -- Display a warning and abort the unpacking if the next item in the bag doesn't fit into the container.
-    if container:getMaxWeight() < itemsInContainer[1]:getActualWeight() + container:getCapacityWeight() then
-        showOkModal(MODAL_WARNING_TEXT, true);
+    if container:getMaxWeight() < itemsInBag[1]:getActualWeight() + container:getCapacityWeight() then
+        luautils.okModal(MODAL_WARNING_TEXT, true);
         return;
     end
 
@@ -81,11 +56,27 @@ local function onUnpackBag(items, player, itemsInContainer, bag)
     -- more carefully. The duration of the TimedAction also depends on the amount of items in the bag.
     local duration;
     if container:getMaxWeight() < (bag:getInventory():getCapacityWeight() + container:getCapacityWeight()) then
-        duration = #itemsInContainer * DURATION_PARTIAL_FACTOR;
+        duration = #itemsInBag * DURATION_PARTIAL_FACTOR;
     else
-        duration = #itemsInContainer * DURATION_DEFAULT_FACTOR;
+        duration = #itemsInBag * DURATION_DEFAULT_FACTOR;
     end
-    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInContainer, bag, duration));
+    ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInBag, bag, duration));
+end
+
+---
+-- Creates the timed action which empties the bag.
+-- @param items - A table containing the clicked items / stack.
+-- @param player - The player who clicked the menu.
+-- @param itemsInContainer - The items contained in the bag.
+-- @param bag - The bag to unpack.
+--
+local function onPackBag(items, player, itemsInContainer, bag)
+    for i = 1, #itemsInContainer do
+        local item = itemsInContainer[i];
+        if instanceof(item, 'InventoryItem') and not instanceof(item, 'InventoryContainer') and not player:isEquipped(item) then
+            ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
+        end
+    end
 end
 
 ---
@@ -96,14 +87,17 @@ end
 -- @param context - The context menu to add a new option to.
 -- @paran func - The function to execute when the menu is clicked.
 --
-local function createMenuEntry(item, itemTable, player, context, func)
+local function createMenuEntry(item, itemTable, player, context)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
-        local itemsInContainer = convertArrayList(item:getInventory():getItems());
-        if #itemsInContainer == 1 then
-            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, func, player, itemsInContainer, item);
-        elseif #itemsInContainer > 1 then
-            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInContainer), itemTable, func, player, itemsInContainer, item);
+        local itemsInBag = convertArrayList(item:getInventory():getItems());
+        if #itemsInBag == 1 then
+            context:addOption(MENU_ENTRY_TEXT_ONE, itemTable, onUnpackBag, player, itemsInBag, item);
+        elseif #itemsInBag > 1 then
+            context:addOption(string.format(MENU_ENTRY_TEXT_MUL, #itemsInBag), itemTable, onUnpackBag, player, itemsInBag, item);
         end
+
+        local itemsInContainer = convertArrayList(item:getContainer():getItems());
+        context:addOption(MENU_ENTRY_PACKING, itemTable, onPackBag, player, itemsInContainer, item);
     end
 end
 
@@ -126,10 +120,10 @@ local function createInventoryMenu(player, context, itemTable)
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
-                createMenuEntry(item.items[i2], itemTable, player, context, onUnpackBag);
+                createMenuEntry(item.items[i2], itemTable, player, context);
             end
         else
-            createMenuEntry(item, itemTable, player, context, onUnpackBag);
+            createMenuEntry(item, itemTable, player, context);
         end
     end
 end
@@ -145,7 +139,7 @@ local function createWorldContextMenu(player, context, worldobjects)
 
     for _, object in ipairs(worldobjects) do
         if instanceof(object, 'IsoWorldInventoryObject') then
-            createMenuEntry(object:getItem(), worldobjects, player, context, onUnpackBag);
+            createUnpackingMenuEntry(object:getItem(), worldobjects, player, context, onUnpackBag);
         end
     end
 end
