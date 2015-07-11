@@ -1,5 +1,12 @@
 # Changelog
 
+### Version 1.6.0
+
+- Added support for quickly packing a bag ([Closes #5](https://github.com/rm-code/unpack-bags/issues/5))
+	- Can be selected in the inventory screen and will grab all items in the same container as the bag
+	- Ignores bags and equipped items
+- Changed folder structure and added a mod id
+
 ### Version 1.5.0
 
 - Added support for Tiny AVC (see https://github.com/blind-coder/pz-tiny_avc/releases/)
