@@ -40,6 +40,32 @@ local function convertArrayList(arrayList)
 end
 
 ---
+-- Creates a list of all tags associated with a bag. If the bag doesn't have
+-- any tags it will return "Tags: none".
+-- @param bag - The bag to create the list for.
+--
+local function createTagList(bag)
+    local tags = 'Tags: '
+    local modData = bag:getModData();
+    if modData.rmcbtags then
+        local counter = 0;
+        for i, v in pairs(modData.rmcbtags) do
+            tags = tags .. i .. ', ';
+            counter = counter + 1;
+        end
+        -- Cut off the last comma and whitespace.
+        tags = tags:sub(1, tags:len() - 2);
+
+        if counter == 0 then
+            tags = 'Tags: none';
+        end
+    else
+        tags = 'Tags: none';
+    end
+    return tags;
+end
+
+---
 -- This function adds or deletes a tag of a bag.
 -- @param bag - The bag which needs to be tagged.
 -- @param button - The button of the TextBox.
@@ -74,25 +100,7 @@ end
 -- @param bag - The bag to tag.
 --
 local function onAddTag(items, player, playerIndex, bag)
-    local tags = 'Tags: '
-    local modData = bag:getModData();
-    if modData.rmcbtags then
-        local counter = 0;
-        for i, v in pairs(modData.rmcbtags) do
-            tags = tags .. i .. ', ';
-            counter = counter + 1;
-        end
-        -- Cut off the last comma and whitespace.
-        tags = tags:sub(1, tags:len() - 2);
-
-        if counter == 0 then
-            tags = 'Tags: none';
-        end
-    else
-        tags = 'Tags: none';
-    end
-
-    local modal = ISTextBox:new(0, 0, 280, 180, tags, '', bag, storeNewTag, playerIndex);
+    local modal = ISTextBox:new(0, 0, 280, 180, createTagList(bag), '', bag, storeNewTag, playerIndex);
     modal:initialise();
     modal:addToUIManager();
 end
