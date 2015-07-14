@@ -101,6 +101,10 @@ end
 --
 local function onAddTag(items, player, playerIndex, bag)
     local modal = ISTextBox:new(0, 0, 280, 180, createTagList(bag), '', bag, storeNewTag, playerIndex);
+    modal.backgroundColor.r =   0;
+    modal.backgroundColor.g =   0;
+    modal.backgroundColor.b =   0;
+    modal.backgroundColor.a = 0.9;
     modal:initialise();
     modal:addToUIManager();
 end
