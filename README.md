@@ -10,7 +10,7 @@ __Convenient Bags__ (_previously Unpack Bags_) is a mod for [Project Zomboid](ht
 - Includes translations for English, German, French, Russian and Finnish
 - [Tiny AVC](https://github.com/blind-coder/pz-tiny_avc) Support
 
-![preview](https://raw.githubusercontent.com/rm-code/convenient-bags/master/RMUnpackBags/unpack.png)
+![preview](https://raw.githubusercontent.com/rm-code/convenient-bags/master/RMConvenientBags/poster.png)
 
 ## Unpacking Bags
 
