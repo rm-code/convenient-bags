@@ -132,7 +132,7 @@ local function onUnpackBag(items, player, itemsInBag, bag)
 
     -- Partially unpacking a bag will have a longer timed action to represent how the player is emptying the bag
     -- more carefully. The duration of the TimedAction also depends on the amount of items in the bag.
-    local traitModifier;
+    local traitModifier = 0;
     if player:HasTrait("Dextrous") then
         traitModifier = -0.8;
     elseif player:HasTrait("AllThumbs") then
