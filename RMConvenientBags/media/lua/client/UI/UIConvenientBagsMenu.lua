@@ -1,4 +1,4 @@
-require('Mods/UnpackBags/TimedActions/TAUnpackBag');
+require('TimedActions/TAUnpackBag');
 require('TimedActions/ISTimedActionQueue');
 require('TimedActions/ISInventoryTransferAction');
 require('luautils');
