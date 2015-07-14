@@ -132,11 +132,17 @@ local function onUnpackBag(items, player, itemsInBag, bag)
 
     -- Partially unpacking a bag will have a longer timed action to represent how the player is emptying the bag
     -- more carefully. The duration of the TimedAction also depends on the amount of items in the bag.
+    local traitModifier;
+    if player:HasTrait("Dextrous") then
+        traitModifier = -0.8;
+    elseif player:HasTrait("AllThumbs") then
+        traitModifier = 0.8;
+    end
     local duration;
     if container:getMaxWeight() < (bag:getInventory():getCapacityWeight() + container:getCapacityWeight()) then
-        duration = #itemsInBag * DURATION_PARTIAL_FACTOR;
+        duration = #itemsInBag * (DURATION_PARTIAL_FACTOR + traitModifier);
     else
-        duration = #itemsInBag * DURATION_DEFAULT_FACTOR;
+        duration = #itemsInBag * (DURATION_DEFAULT_FACTOR + traitModifier);
     end
     ISTimedActionQueue.add(TAUnpackBag:new(player, itemsInBag, bag, duration));
 end
