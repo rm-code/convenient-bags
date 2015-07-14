@@ -2,7 +2,6 @@ name=Unpack Bags
 id=RMUnpackBags
 poster=unpack.png
 description=This mod allows you to empty out bags quickly by right-clicking them.
-id=RMUnpackBags
 
 modversion=1.6.0
 pzversion=32.16
