@@ -1,17 +1,17 @@
-# Unpack Bags
+# Convenient Bags
 
-Unpack Bags is a mod for [Project Zomboid](http://projectzomboid.com/) which allows you to quickly and conveniently unload bags.
+__Convenient Bags__ is a mod for [Project Zomboid](http://projectzomboid.com/) which adds several new features to the vanilla item containers.
 
 Bags can be unpacked everywhere. They will dump their contents into the container in which they currently are located. This can be the player's inventory, a cupboard, or even the floor.
 
-![preview](https://raw.githubusercontent.com/rm-code/unpack-bags/master/RMUnpackBags/unpack.png)
+![preview](https://raw.githubusercontent.com/rm-code/convenient-bags/master/RMUnpackBags/unpack.png)
 
 ## Overview
 
 - Quickly empty bags
 	- Works in the player's inventory, a container or even the floor
 - Bags on the floor can be emptied via a world context menu
-- Includes translations for English, German, French, Russian and Finnish 
+- Includes translations for English, German, French, Russian and Finnish
 - [Tiny AVC](https://github.com/blind-coder/pz-tiny_avc) Support
 
 ## Installation
