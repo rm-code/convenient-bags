@@ -88,6 +88,8 @@ local function onAddTag(items, player, playerIndex, bag)
         if counter == 0 then
             tags = 'Tags: none';
         end
+    else
+        tags = 'Tags: none';
     end
 
     local modal = ISTextBox:new(0, 0, 280, 180, tags, '', bag, storeNewTag, playerIndex);
