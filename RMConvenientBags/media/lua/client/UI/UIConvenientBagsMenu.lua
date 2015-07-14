@@ -10,12 +10,15 @@ require('luautils');
 local MENU_ENTRY_TEXT_ONE = getText('UI_menu_entry_one');
 local MENU_ENTRY_TEXT_MUL = getText('UI_menu_entry_multi');
 local MENU_ENTRY_PACKING  = getText('UI_menu_entry_packing');
+local MENU_ENTRY_TAGGING  = getText('UI_menu_entry_tagging');
 local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 
 -- The factors for calculating the timed action durations for both
 -- the normal and the partial unpacking.
 local DURATION_DEFAULT_FACTOR = 2.5;
 local DURATION_PARTIAL_FACTOR = 3.5;
+
+local TAG_DELETION_IDENTIFIER = '!';
 
 -- ------------------------------------------------
 -- Local Functions
@@ -34,6 +37,62 @@ local function convertArrayList(arrayList)
     end
 
     return itemTable;
+end
+
+---
+-- This function adds or deletes a tag of a bag.
+-- @param bag - The bag which needs to be tagged.
+-- @param button - The button of the TextBox.
+-- @param player - The player who clicked the TextBox.
+--
+local function storeNewTag(bag, button, player)
+    if button.internal == 'OK' then
+        local tag = button.parent.entry:getText();
+        if tag and tag ~= '' then
+            local modData = bag:getModData();
+
+            -- Initialise new tag table or load the saved one.
+            modData.rmcbtags = modData.rmcbtags or {};
+
+            -- If the tag starts with TAG_DELETION_IDENTIFIER it will be used
+            -- to delete the tag from the table. If not it stores it.
+            if luautils.stringStarts(tag, TAG_DELETION_IDENTIFIER) then
+                modData.rmcbtags[tag:sub(2)] = nil;
+            else
+                modData.rmcbtags[tag] = true;
+            end
+        end
+    end
+end
+
+---
+-- Creates a TextBox which allows the player to enter a new tag.
+-- The TextBox will display a list of already existing tags.
+-- @param items - All items in the inventory.
+-- @param player - The player who clicked the menu.
+-- @param playerIndex - The player's index.
+-- @param bag - The bag to tag.
+--
+local function onAddTag(items, player, playerIndex, bag)
+    local tags = 'Tags: '
+    local modData = bag:getModData();
+    if modData.rmcbtags then
+        local counter = 0;
+        for i, v in pairs(modData.rmcbtags) do
+            tags = tags .. i .. ', ';
+            counter = counter + 1;
+        end
+        -- Cut off the last comma and whitespace.
+        tags = tags:sub(1, tags:len() - 2);
+
+        if counter == 0 then
+            tags = 'Tags: none';
+        end
+    end
+
+    local modal = ISTextBox:new(0, 0, 280, 180, tags, '', bag, storeNewTag, playerIndex);
+    modal:initialise();
+    modal:addToUIManager();
 end
 
 ---
@@ -74,7 +133,20 @@ local function onPackBag(items, player, itemsInContainer, bag)
     for i = 1, #itemsInContainer do
         local item = itemsInContainer[i];
         if instanceof(item, 'InventoryItem') and not instanceof(item, 'InventoryContainer') and not player:isEquipped(item) then
-            ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
+
+            local modData = bag:getModData();
+            local counter = 0;
+            if modData.rmcbtags then
+                for tag, _ in pairs(modData.rmcbtags) do
+                    counter = counter + 1;
+                    if item:getCategory():lower() == tag:lower() or item:getName():lower():find(tag:lower()) then
+                        ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
+                    end
+                end
+            end
+            if counter == 0 then
+                ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
+            end
         end
     end
 end
@@ -84,10 +156,11 @@ end
 -- @param item - The bag item.
 -- @param itemTable - A table containing the clicked items / stack.
 -- @param player - The player who clicked the menu.
+-- @param playerIndex - The index of the player who clicked the menu.
 -- @param context - The context menu to add a new option to.
 -- @paran func - The function to execute when the menu is clicked.
 --
-local function createMenuEntry(item, itemTable, player, context)
+local function createMenuEntry(item, itemTable, player, playerIndex, context)
     if instanceof(item, 'InventoryItem') and instanceof(item, 'InventoryContainer') then
         local itemsInBag = convertArrayList(item:getInventory():getItems());
         if #itemsInBag == 1 then
@@ -98,6 +171,9 @@ local function createMenuEntry(item, itemTable, player, context)
 
         local itemsInContainer = convertArrayList(item:getContainer():getItems());
         context:addOption(MENU_ENTRY_PACKING, itemTable, onPackBag, player, itemsInContainer, item);
+
+        -- Add option to add tags to a bag for automatic item sorting.
+        context:addOption(MENU_ENTRY_TAGGING, itemTable, onAddTag, player, playerIndex, item);
     end
 end
 
@@ -108,8 +184,8 @@ end
 -- @param context - The context menu to add a new option to.
 -- @param itemTable - A table containing the clicked items / stack.
 --
-local function createInventoryMenu(player, context, itemTable)
-    local player = getSpecificPlayer(player);
+local function createInventoryMenu(playerIndex, context, itemTable)
+    local player = getSpecificPlayer(playerIndex);
 
     -- We iterate through the table of clicked items. We have
     -- to seperate between single items, stacks and expanded
@@ -120,10 +196,10 @@ local function createInventoryMenu(player, context, itemTable)
             -- We start to iterate at the second index to jump over the dummy
             -- item that is contained in the item-table.
             for i2 = 2, #item.items do
-                createMenuEntry(item.items[i2], itemTable, player, context);
+                createMenuEntry(item.items[i2], itemTable, player, playerIndex, context);
             end
         else
-            createMenuEntry(item, itemTable, player, context);
+            createMenuEntry(item, itemTable, player, playerIndex, context);
         end
     end
 end
