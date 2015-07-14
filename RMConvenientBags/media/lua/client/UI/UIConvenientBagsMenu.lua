@@ -83,7 +83,12 @@ local function storeNewTag(bag, button, player)
             -- If the tag starts with TAG_DELETION_IDENTIFIER it will be used
             -- to delete the tag from the table. If not it stores it.
             if luautils.stringStarts(tag, TAG_DELETION_IDENTIFIER) then
-                modData.rmcbtags[tag:sub(2)] = nil;
+                -- Ignore case when trying to delete a tag.
+                for i, _ in pairs(modData.rmcbtags) do
+                    if i:lower() == tag:sub(2):lower() then
+                        modData.rmcbtags[i] = nil;
+                    end
+                end
             else
                 modData.rmcbtags[tag] = true;
             end
