@@ -3,4 +3,5 @@ UI_DE = {
     UI_menu_entry_multi = "Entpacke %d Gegenstände",
     UI_warning_modal = "Nicht genug Platz, um die Tasche hier zu entpacken!",
     UI_menu_entry_packing = "Gegenstände einpacken",
+    UI_menu_entry_tagging = "Tags verändern",
 };
