@@ -1,6 +1,7 @@
 require('TimedActions/TAUnpackBag');
 require('TimedActions/ISTimedActionQueue');
 require('TimedActions/ISInventoryTransferAction');
+require('UI/UITagModal');
 require('luautils');
 
 -- ------------------------------------------------
@@ -72,25 +73,29 @@ end
 -- @param player - The player who clicked the TextBox.
 --
 local function storeNewTag(bag, button, player)
-    if button.internal == 'OK' then
+    if button.internal == 'ADD' then
         local tag = button.parent.entry:getText();
         if tag and tag ~= '' then
-            local modData = bag:getModData();
-
             -- Initialise new tag table or load the saved one.
+            local modData = bag:getModData();
             modData.rmcbtags = modData.rmcbtags or {};
 
-            -- If the tag starts with TAG_DELETION_IDENTIFIER it will be used
-            -- to delete the tag from the table. If not it stores it.
-            if luautils.stringStarts(tag, TAG_DELETION_IDENTIFIER) then
-                -- Ignore case when trying to delete a tag.
-                for i, _ in pairs(modData.rmcbtags) do
-                    if i:lower() == tag:sub(2):lower() then
-                        modData.rmcbtags[i] = nil;
-                    end
+            -- Add tag.
+            modData.rmcbtags[tag] = true;
+        end
+    elseif button.internal == 'REMOVE' then
+        local tag = button.parent.entry:getText();
+        if tag and tag ~= '' then
+            -- Initialise new tag table or load the saved one.
+            local modData = bag:getModData();
+            modData.rmcbtags = modData.rmcbtags or {};
+
+            -- Cycle through all tag-entries and remove the tag if it can be found.
+            -- The case will be ignored when trying to delete a tag.
+            for i, _ in pairs(modData.rmcbtags) do
+                if i:lower() == tag:lower() then
+                    modData.rmcbtags[i] = nil;
                 end
-            else
-                modData.rmcbtags[tag] = true;
             end
         end
     end
@@ -105,7 +110,7 @@ end
 -- @param bag - The bag to tag.
 --
 local function onAddTag(items, player, playerIndex, bag)
-    local modal = ISTextBox:new(0, 0, 280, 180, createTagList(bag), '', bag, storeNewTag, playerIndex);
+    local modal = UITagModal:new(0, 0, 280, 180, createTagList(bag), bag, storeNewTag, playerIndex);
     modal.backgroundColor.r =   0;
     modal.backgroundColor.g =   0;
     modal.backgroundColor.b =   0;
