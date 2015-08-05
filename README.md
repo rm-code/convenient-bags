@@ -30,6 +30,8 @@ Bags can also be conveniently filled with items. Clicking on "Pack items" will m
 
 By using tags this option can be limited to certain types of items. If a bag has at least one tag only items fitting the tag will be transferred into the bag.
 
+![packing.gif](https://cloud.githubusercontent.com/assets/11627131/9081433/8f21224a-3b5c-11e5-94ac-5097bd4e9214.gif)
+
 ## Installation
 
 [Look here](http://theindiestone.com/forums/index.php/topic/1395-) for installation instructions.
