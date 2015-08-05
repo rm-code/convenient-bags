@@ -164,7 +164,14 @@ local function onPackBag(items, player, itemsInContainer, bag)
             if modData.rmcbtags then
                 for tag, _ in pairs(modData.rmcbtags) do
                     counter = counter + 1;
-                    if item:getCategory():lower() == tag:lower() or item:getName():lower():find(tag:lower()) then
+
+                    -- Check for custom (modded) categories or use the default categories.
+                    local category = item:getDisplayCategory();
+                    if not category then
+                        category = item:getCategory(); -- Default.
+                    end
+
+                    if category:lower() == tag:lower() or item:getName():lower():find(tag:lower()) then
                         ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
                     end
                 end
