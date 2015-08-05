@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.7.1
+
+- [Fixed #8](https://github.com/rm-code/convenient-bags/issues/8) - Mod now uses custom item categories, when checking for tagged items to pack into a bag
+
 ### Version 1.7.0
 
 - Renamed mod to ___Convenient Bags___
@@ -17,7 +21,7 @@
 
 ### Version 1.5.0
 
-- Added support for Tiny AVC (see https://github.com/blind-coder/pz-tiny_avc/releases/)
+- Added support for [Tiny AVC](https://github.com/blind-coder/pz-tiny_avc/releases/)
 
 ### Version 1.4.0
 
@@ -25,7 +29,7 @@
 
 ### Version 1.3.0
 
-- Duration of the TimeAction is now dependent on the amount of items in the bag
+- Duration of the TimedAction is now dependent on the amount of items in the bag
 - Bags can now be partially emptied if the target container is too small to hold all the items ([Closes #4](https://github.com/rm-code/convenient-bags/issues/4))
 - [Fixed #2](https://github.com/rm-code/convenient-bags/issues/2): Items are now placed on the bag's IsoSquare
 
@@ -53,7 +57,7 @@
 
 ### Version 1.0.3
 
-- Fixed: Mod not loading due to 'require' calls
+- Fixed mod not loading due to 'require' calls
 
 ### Version 1.0.2
 
