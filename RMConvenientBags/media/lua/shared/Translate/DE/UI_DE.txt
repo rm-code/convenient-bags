@@ -4,4 +4,6 @@ UI_DE = {
     UI_warning_modal = "Nicht genug Platz, um die Tasche hier zu entpacken!",
     UI_menu_entry_packing = "Gegenstände einpacken",
     UI_menu_entry_tagging = "Tags verändern",
+    UI_optionscreen_binding_RMConvenientBags = "Convenient Bags",
+    UI_optionscreen_binding_RMDropBags = "Taschen fallen lassen",
 };
