@@ -3,7 +3,7 @@
 ### Version 1.8.0
 
 - Added button for removing tags to the text entry box
-- Added turn tail mod
+- Added turn tail mod ([Closes #9](https://github.com/rm-code/convenient-bags/issues/9))
 	- Allows the player to quickly drop equipped bags
 	- The default key 'X' can be re-assigned in the options menu
 - Updated text entry box to allow for multiple entries at once (e.g.: ```Food, Hammer, Bacon```)
