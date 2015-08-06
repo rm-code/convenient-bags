@@ -1,5 +1,14 @@
 # Changelog
 
+### Version 1.8.0
+
+- Added button for removing tags to the text entry box
+- Added turn tail mod
+	- Allows the player to quickly drop equipped bags
+	- The default key 'X' can be re-assigned in the options menu
+- Updated text entry box to allow for multiple entries at once (e.g.: ```Food, Hammer, Bacon```)
+	- The tags will be split and trimmed before being saved
+
 ### Version 1.7.1
 
 - [Fixed #8](https://github.com/rm-code/convenient-bags/issues/8) - Mod now uses custom item categories, when checking for tagged items to pack into a bag
