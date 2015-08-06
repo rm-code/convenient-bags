@@ -19,13 +19,11 @@ __Convenient Bags__ (_previously Unpack Bags_) is a mod for [Project Zomboid](ht
 
 Bags can be quickly unpacked via a context menu. The bag will drop its contents into the container in which it currently is contained (this can be the player's inventory, a container or even the floor). If the container is full the bag will only be partially emptied.
 
-### Adding tags
+### Using tags
 
-Tags can be added to a bag to limit it only to certain types of items. When you click "Edit Tags" a small text box will show up, allowing you to add a new tag. This can be an item category (Food, Weapon, etc.) or an item's full or partial name (Water, Bowl, Garbage Bag). 
+Tags can be added to a bag to limit it only to certain types of items. Click on the bag you want to edit and select "Edit Tags". A small text box will show up, allowing you to add or remove tags. This can be an item category (Food, Weapon, etc.) or an item's full or partial name (Water, Bowl, Garbage Bag). 
 
-Tags can be removed by editing the tags and entering the tag you want to remove, preceded by an exclamation mark (```!tagtoremove```).
-
-These tags are used by the packing option.
+These tags are used by the packing option (see below).
 
 ### Packing Bags
 
