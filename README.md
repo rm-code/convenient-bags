@@ -21,7 +21,7 @@ Bags can be quickly unpacked via a context menu. The bag will drop its contents 
 
 ### Using tags
 
-Tags can be added to a bag to limit it only to certain types of items. Click on the bag you want to edit and select "Edit Tags". A small text box will show up, allowing you to add or remove tags. This can be an item category (Food, Weapon, etc.) or an item's full or partial name (Water, Bowl, Garbage Bag). 
+Tags can be added to a bag to limit it only to certain types of items. Click on the bag you want to edit and select "Edit Tags". A small text box will show up, allowing you to add or remove tags. This can be an item category (Food, Weapon, etc.) or an item's full or partial name (Water, Bowl, Garbage Bag). You can add multiple tags at once by separating them with a comma (e.g.: ```Food, Hammer, Butter Knife```).
 
 These tags are used by the packing option (see below).
 
