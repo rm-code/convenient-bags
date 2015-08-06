@@ -19,8 +19,6 @@ local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 local DURATION_DEFAULT_FACTOR = 2.5;
 local DURATION_PARTIAL_FACTOR = 3.5;
 
-local TAG_DELETION_IDENTIFIER = '!';
-
 -- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
