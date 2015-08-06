@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.8.1
+
+- Fixed tag comparison
+
 ### Version 1.8.0
 
 - Added button for removing tags to the text entry box
