@@ -179,7 +179,7 @@ local function onPackBag(items, player, itemsInContainer, bag)
                         category = item:getCategory(); -- Default.
                     end
 
-                    if category:lower() == tag:lower() or item:getName():lower():find(tag:lower()) then
+                    if category:lower():find(tag:lower()) or item:getName():lower():find(tag:lower()) then
                         ISTimedActionQueue.add(ISInventoryTransferAction:new(player, item, bag:getContainer(), bag:getInventory()));
                     end
                 end
