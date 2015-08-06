@@ -73,32 +73,29 @@ end
 -- @param player - The player who clicked the TextBox.
 --
 local function storeNewTag(bag, button, player)
-    if button.internal == 'ADD' then
-        local tag = button.parent.entry:getText();
-        if tag and tag ~= '' then
-            -- Initialise new tag table or load the saved one.
-            local modData = bag:getModData();
-            modData.rmcbtags = modData.rmcbtags or {};
+    local tag = button.parent.entry:getText();
 
-            -- Split the tags if there are multiple entries.
-            for snippet in tag:gmatch('[^' .. SPLIT_IDENTIFIER .. ']+') do
-                local ntag = snippet:gsub('^%s*(.-)%s*$', '%1'); -- Trim whitespace.
-                modData.rmcbtags[ntag] = true;
-            end
+    -- Exit early if we don't have a tag or the tag is empty.
+    if not tag or tag == '' then
+        return;
+    end
+
+    -- Load the tags from the mod data or initialise a new table.
+    local modData = bag:getModData();
+    modData.rmcbtags = modData.rmcbtags or {};
+
+    if button.internal == 'ADD' then
+        -- Split the tags if there are multiple entries.
+        for snippet in tag:gmatch('[^' .. SPLIT_IDENTIFIER .. ']+') do
+            local ntag = snippet:gsub('^%s*(.-)%s*$', '%1'); -- Trim whitespace.
+            modData.rmcbtags[ntag] = true;
         end
     elseif button.internal == 'REMOVE' then
-        local tag = button.parent.entry:getText();
-        if tag and tag ~= '' then
-            -- Initialise new tag table or load the saved one.
-            local modData = bag:getModData();
-            modData.rmcbtags = modData.rmcbtags or {};
-
-            -- Cycle through all tag-entries and remove the tag if it can be found.
-            -- The case will be ignored when trying to delete a tag.
-            for i, _ in pairs(modData.rmcbtags) do
-                if i:lower() == tag:lower() then
-                    modData.rmcbtags[i] = nil;
-                end
+        -- Cycle through all tag-entries and remove the tag if it can be found.
+        -- The case will be ignored when trying to delete a tag.
+        for i, _ in pairs(modData.rmcbtags) do
+            if i:lower() == tag:lower() then
+                modData.rmcbtags[i] = nil;
             end
         end
     end
