@@ -11,8 +11,7 @@ TAUnpackBag = ISBaseTimedAction:derive('TAUnpackBag');
 -- ------------------------------------------------
 
 ---
--- The condition which tells the timed action if it
--- is still valid.
+-- The condition which tells the timed action if it is still valid.
 --
 function TAUnpackBag:isValid()
     return not self.full;

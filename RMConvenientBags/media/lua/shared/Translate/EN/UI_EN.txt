@@ -4,4 +4,6 @@ UI_EN = {
     UI_warning_modal = "There is not enough space to unpack the bag here!",
     UI_menu_entry_packing = "Pack items",
     UI_menu_entry_tagging = "Edit tags",
+    UI_optionscreen_binding_RMConvenientBags = "Convenient Bags",
+    UI_optionscreen_binding_RMDropBags = "Drop Bags",
 };
