@@ -19,6 +19,8 @@ local MODAL_WARNING_TEXT  = getText('UI_warning_modal');
 local DURATION_DEFAULT_FACTOR = 2.5;
 local DURATION_PARTIAL_FACTOR = 3.5;
 
+local SPLIT_IDENTIFIER = ',';
+
 -- ------------------------------------------------
 -- Local Functions
 -- ------------------------------------------------
@@ -78,8 +80,11 @@ local function storeNewTag(bag, button, player)
             local modData = bag:getModData();
             modData.rmcbtags = modData.rmcbtags or {};
 
-            -- Add tag.
-            modData.rmcbtags[tag] = true;
+            -- Split the tags if there are multiple entries.
+            for snippet in tag:gmatch('[^' .. SPLIT_IDENTIFIER .. ']+') do
+                local ntag = snippet:gsub('^%s*(.-)%s*$', '%1'); -- Trim whitespace.
+                modData.rmcbtags[ntag] = true;
+            end
         end
     elseif button.internal == 'REMOVE' then
         local tag = button.parent.entry:getText();
