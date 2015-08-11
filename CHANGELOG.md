@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.8.2
+
+- [Fixed #11](https://github.com/rm-code/convenient-bags/issues/11) - Turn Tail should work corrently now when other items are equipped
+
 ### Version 1.8.1
 
 - Fixed tag comparison
