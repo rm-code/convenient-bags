@@ -35,7 +35,7 @@ By using tags this option can be limited to certain types of items. If a bag has
 
 ### Turn Tail
 
-The mod also allows you to use a key (Default: 'X' - can be changed in the options menu) to quickly drop equipped bags in case of an emergency. This might come in handy if you are overencumbered while being ambushed by some zombies.
+The mod also allows you to use a key (Default: ___X___ - can be changed in the options menu) to quickly drop equipped bags in case of an emergency. This might come in handy if you are overencumbered while being ambushed by some zombies.
 
 The bags will be dropped in the following order:
 
@@ -43,7 +43,7 @@ The bags will be dropped in the following order:
 2. Bags equipped in secondary slot
 3. Bags equipped on the back
 
-This feature was inspired by the original "Turn Tail" Mod by The_Real_Al. 
+This feature was inspired by the original [_Turn Tail_](http://theindiestone.com/forums/index.php/topic/1739-) mod by [_The_Real_Al_](http://theindiestone.com/forums/index.php/user/1488-). 
 
 ## Installation
 
