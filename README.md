@@ -43,7 +43,7 @@ The bags will be dropped in the following order:
 2. Bags equipped in secondary slot
 3. Bags equipped on the back
 
-This feature was inspired by the original [_Turn Tail_](http://theindiestone.com/forums/index.php/topic/1739-) mod by [_The_Real_Al_](http://theindiestone.com/forums/index.php/user/1488-). 
+This feature was inspired by the original [_Turn Tail_](https://theindiestone.com/forums/index.php?/topic/1739-turn-tail-hotkey-to-drop-equipped-bags/) mod by [_The_Real_Al_](https://theindiestone.com/forums/index.php?/profile/1488-the_real_al/). 
 
 ## Installation
 
@@ -54,4 +54,4 @@ The mod has already been translated to a bunch of different languages. If you wa
 
 Adding new languages is quite easy. Just take a look at the ```media/lua/shared/Translate``` folder in this mod.
 
-For more information about translations check the [official forums](http://theindiestone.com/forums/index.php/forum/56-).
+For more information about translations check the [official forums](https://theindiestone.com/forums/index.php?/topic/1047-convenient-bags-182/).
